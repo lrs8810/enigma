@@ -26,4 +26,12 @@ class EncryptorTest < Minitest::Test
     assert_equal 1025, @encryptor.last_four_digits("040895")
     assert_equal 4561, @encryptor.last_four_digits
   end
+
+  def test_generate_offset
+    expected = {A:1, B:0, C:2, D:5}
+    assert_equal expected, @encryptor.generate_offset("040895")
+
+    expected2 = {A:4, B:5, C:6, D:1}
+    assert_equal expected2, @encryptor.generate_offset
+  end
 end
