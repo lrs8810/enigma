@@ -43,6 +43,9 @@ class EncryptorTest < Minitest::Test
   end
 
   def test_generate_keys
-    assert_equal 
+    expected = {A:2, B:27, C:71, D:15}
+    assert_equal expected, @encryptor.generate_keys("02715")
+
+    assert_equal expected.length, @encryptor.generate_keys.length
   end
 end
