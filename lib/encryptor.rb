@@ -42,8 +42,20 @@ class Encryptor < RandomNumGenerator
     end
   end
 
-  def generate_keys
-    
+  def generate_keys(key = nil)
+    if key == nil
+      keys_hash = Hash.new(0)
+      keys = (:A..:D).to_a
+      keys_values = split_key(@random_key).map(&:to_i)
+      keys.zip(keys_values) {|key, value| keys_hash[key] = value}
+      keys_hash
+    else
+      keys_hash = Hash.new(0)
+      keys = (:A..:D).to_a
+      keys_values = split_key(key).map(&:to_i)
+      keys.zip(keys_values) {|key, value| keys_hash[key] = value}
+      keys_hash
+    end
   end
 
   def split_key(key = nil)
