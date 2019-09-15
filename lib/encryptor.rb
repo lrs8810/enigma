@@ -10,7 +10,6 @@ class Encryptor < RandomNumGenerator
     @random_key = RandomNumGenerator.generate_random_num
   end
 
-
   def generate_offset(date = nil)
     if date == nil
       offset_hash = Hash.new(0)
@@ -40,6 +39,22 @@ class Encryptor < RandomNumGenerator
       @current_date * @current_date
     else
       date.to_i * date.to_i
+    end
+  end
+
+  def generate_keys
+    
+  end
+
+  def split_key(key = nil)
+    if key == nil
+      key_arr = []
+      @random_key.chars.each_cons(2) { |a, b| key_arr << a + b }
+      key_arr
+    else
+      key_arr = []
+      key.chars.each_cons(2) { |a, b| key_arr << a + b }
+      key_arr
     end
   end
 end
