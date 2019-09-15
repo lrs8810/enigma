@@ -34,4 +34,15 @@ class EncryptorTest < Minitest::Test
     expected2 = {A:4, B:5, C:6, D:1}
     assert_equal expected2, @encryptor.generate_offset
   end
+
+  def test_split_key
+    expected = ["02", "27", "71", "15"]
+    assert_equal expected, @encryptor.split_key("02715")
+
+    assert_equal expected.length, @encryptor.split_key.length
+  end
+
+  def test_generate_keys
+    assert_equal 
+  end
 end
