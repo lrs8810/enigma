@@ -1,12 +1,9 @@
+require './lib/encryptor'
+require './lib/decryptor'
+
 class Enigma
   def initialize
-    @input = {}
+    @encryptor = Encryptor.new
   end
 
-  def encrypt(message, key, date)
-    @input[:message] = message
-    @input[:key] = key
-    @input[:date] = date
-    @input
-  end
 end
