@@ -1,5 +1,4 @@
 require './lib/encryptor'
-require './lib/decryptor'
 
 class Enigma
   def initialize

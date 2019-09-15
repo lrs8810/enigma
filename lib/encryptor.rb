@@ -7,7 +7,7 @@ class Encryptor < RandomNumGenerator
   def initialize
     @character_set = ("a".."z").to_a << " "
     @current_date = (DateTime.now.strftime "%d%m%y").to_i
-    @random_key = RandomNumGenerator.new
+    @random_key = RandomNumGenerator.generate_random_num
   end
 
 
