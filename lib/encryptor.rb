@@ -11,6 +11,22 @@ class Encryptor < RandomNumGenerator
   end
 
 
+  def generate_offset(date = nil)
+    if date == nil
+      offset_hash = Hash.new(0)
+      offset_key = (:A..:D).to_a
+      last_four_arr = last_four_digits(@current_date).to_s.chars.map(&:to_i)
+      offset_key.zip(last_four_arr) {|key, value| offset_hash[key] = value}
+      offset_hash
+    else
+      offset_hash = Hash.new(0)
+      offset_key = (:A..:D).to_a
+      last_four_arr = last_four_digits(date).to_s.chars.map(&:to_i)
+      offset_key.zip(last_four_arr) {|key, value| offset_hash[key] = value}
+      offset_hash
+    end
+  end
+
   def last_four_digits(date = nil)
     if date == nil
       square_date(@current_date).to_s.slice!(-4..-1).to_i
