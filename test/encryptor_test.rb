@@ -26,4 +26,38 @@ class EncryptorTest < Minitest::Test
     assert_equal 1025, @encryptor.last_four_digits("040895")
     assert_equal 4561, @encryptor.last_four_digits
   end
+
+  def test_generate_offset
+    expected = {A:1, B:0, C:2, D:5}
+    assert_equal expected, @encryptor.generate_offset("040895")
+
+    expected2 = {A:4, B:5, C:6, D:1}
+    assert_equal expected2, @encryptor.generate_offset
+  end
+
+  def test_split_key
+    expected = ["02", "27", "71", "15"]
+    assert_equal expected, @encryptor.split_key("02715")
+
+    assert_equal expected.length, @encryptor.split_key.length
+  end
+
+  def test_generate_keys
+    expected = {A:2, B:27, C:71, D:15}
+    assert_equal expected, @encryptor.generate_keys("02715")
+
+    assert_equal expected.length, @encryptor.generate_keys.length
+  end
+
+  def test_generate_shift
+    expected = {A:3, B:27, C:73, D:20}
+
+    assert_equal expected, @encryptor.generate_shift("02715", "040895")
+
+    expected2 = {A:6, B:32, C:77, D:16}
+    assert_equal expected2, @encryptor.generate_shift("02715")
+
+    expected3 = {A:6, B:32, C:77, D:16}
+    assert_equal expected3.length, @encryptor.generate_shift.length
+  end
 end
