@@ -48,4 +48,16 @@ class EncryptorTest < Minitest::Test
 
     assert_equal expected.length, @encryptor.generate_keys.length
   end
+
+  def test_generate_shift
+    expected = {A:3, B:27, C:73, D:20}
+
+    assert_equal expected, @encryptor.generate_shift("02715", "040895")
+
+    expected2 = {A:6, B:32, C:77, D:16}
+    assert_equal expected2, @encryptor.generate_shift("02715")
+
+    expected3 = {A:6, B:32, C:77, D:16}
+    assert_equal expected3.length, @encryptor.generate_shift.length
+  end
 end
