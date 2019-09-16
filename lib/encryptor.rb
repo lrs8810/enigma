@@ -39,7 +39,7 @@ class Encryptor
 
   def split_key(key)
     key_arr = []
-    key.chars.each_cons(2) { |a, b| key_arr << a + b }
+    key.chars.each_cons(2) { |elem_1, elem_2| key_arr << elem_1 + elem_2 }
     key_arr.map(&:to_i)
   end
 
@@ -62,12 +62,49 @@ class Encryptor
     build_shift(key || @random_key, date || current_date)
   end
 
-  # def encrypt_message(message, key = nil, date = nil)
-  #   generate_shift(key, date)
-  #   message_arr = message.downcase.chars
-  #   message_arr.with_index(1) do |index, value|
-  #     puts "#{index}: #{value}"
+  def shift_range
+    chars = character_set.map(&:ord)
+    hash = Hash.new(0)
+    chars.each.with_index(1) do | char, index|
+      hash[char] = index
+    end
+    hash
+  end
+
+  def final_shift(message, key = nil, date = nil)
+    shifts = generate_shift(key, date).values
+    shifts.map { |shift| shift % shift_range.length }
+  end
+
+  # def find_position(message, key = nil, date = nil)
+  #   dc_message = message.downcase.chars
+  #   shifts = generate_shift(key, date).values
+  #   char_hash = shift_range
+  #   final_shifts = shifts.map { |shift| shift % char_hash.length }
+  #   final = []
+  #   char_hash.each do |ord_val, position|
+  #     dc_message.each_with_index do |letter, index|
+  #       (final_shifts[0] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 0
+  #
+  #       require 'pry'; binding.pry
+  #     end
+  # end
+
+  # def shift_message(message, key = nil, date = nil)
+  #   shifts = generate_shift(key, date).values
+  #   char_hash = shift_range
+  #   dc_message = message.downcase.chars
+  #   final_shifts = shifts.map { |shift| shift % char_hash.length }
+  #   final = []
+  #   char_hash.each do |ord_val, position|
+  #     dc_message.each_with_index do |letter, index|
+  #       final << char_hash.key(final_shifts[0] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 0
+  #       final << char_hash.key(final_shifts[1] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 1
+  #       final << char_hash.key(final_shifts[2] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 2
+  #       final << char_hash.key(final_shifts[3] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 3
+  #       require 'pry'; binding.pry
+  #     end
   #   end
-  #   require 'pry'; binding.pry
+  #   final.join
   # end
 end
