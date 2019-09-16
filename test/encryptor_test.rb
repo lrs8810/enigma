@@ -83,8 +83,17 @@ class EncryptorTest < Minitest::Test
     assert_equal expected3.length, @encryptor.generate_shift.length
   end
 
-  def test_encrypt_message
-    skip
-    assert_equal "keder ohulw", @encryptor.encrypt_message("Hello World", "02715", "040895")
+  def test_shift_range
+    expected = {97=>1, 98=>2, 99=>3, 100=>4, 101=>5, 102=>6, 103=>7, 104=>8, 105=>9, 106=>10, 107=>11, 108=>12, 109=>13, 110=>14, 111=>15, 112=>16, 113=>17, 114=>18, 115=>19, 116=>20, 117=>21, 118=>22, 119=>23, 120=>24, 121=>25, 122=>26, 32=>27}
+    assert_equal expected, @encryptor.shift_range
+  end
+
+  def test_final_shift
+    expected = [3, 0, 19, 20]
+    assert_equal expected, @encryptor.final_shift("Hello World", "02715", "040895")
+  end
+
+  def test_shift_message
+    assert_equal "keder ohulw", @encryptor.shift_message("Hello World", "02715", "040895")
   end
 end
