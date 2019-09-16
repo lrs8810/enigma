@@ -45,15 +45,15 @@ class Encryptor < RandomNumGenerator
   def generate_keys(key = nil)
     if key == nil
       keys_hash = Hash.new(0)
-      keys = (:A..:D).to_a
-      keys_values = split_key(@random_key).map(&:to_i)
-      keys.zip(keys_values) {|key, value| keys_hash[key] = value}
+      symbol_arr = (:A..:D).to_a
+      values_arr = split_key(@random_key).map(&:to_i)
+      symbol_arr.zip(values_arr) {|symbol, value| keys_hash[symbol] = value}
       keys_hash
     else
       keys_hash = Hash.new(0)
-      keys = (:A..:D).to_a
-      keys_values = split_key(key).map(&:to_i)
-      keys.zip(keys_values) {|key, value| keys_hash[key] = value}
+      symbol_arr = (:A..:D).to_a
+      values_arr = split_key(key).map(&:to_i)
+      symbol_arr.zip(values_arr) {|symbol, value| keys_hash[symbol] = value}
       keys_hash
     end
   end
@@ -67,6 +67,24 @@ class Encryptor < RandomNumGenerator
       key_arr = []
       key.chars.each_cons(2) { |a, b| key_arr << a + b }
       key_arr
+    end
+  end
+
+  def generate_shift(key = nil, date = nil)
+    if key == nil && date == nil
+      keys_hash = generate_keys(@random_key)
+      offset_hash = generate_offset(@current_date)
+      keys_hash.merge!(offset_hash) do |symbol, key_val, offset_val|
+        key_val + offset_val
+      end
+      keys_hash
+    else
+      keys_hash = generate_keys(key)
+      offset_hash = generate_offset(date)
+      keys_hash.merge!(offset_hash) do |symbol, key_val, offset_val|
+        key_val + offset_val
+      end
+      keys_hash
     end
   end
 end
