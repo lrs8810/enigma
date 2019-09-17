@@ -81,10 +81,12 @@ class Encryptor
     shift_arr = final_shift(message, key, date)
     final = []
       dc_message.each_with_index do |letter, index|
+        final << letter if !character_set.include?(letter)
         final << (shift_arr[0] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 0
         final << (shift_arr[1] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 1
         final << (shift_arr[2] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 2
         final << (shift_arr[3] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 3
+        # require 'pry'; binding.pry
       end
     final
   end
@@ -93,7 +95,9 @@ class Encryptor
     final = find_index(message, key, date)
     final_arr = []
     final.each do |shift|
-      if shift > 27
+      if shift.class == String
+        final_arr << shift
+      elsif shift > 27
         final_arr << shift - shift_range.length
       else
         final_arr << shift
@@ -105,7 +109,11 @@ class Encryptor
   def build_encryption(message, key, date)
     final_shifts = find_final_index(message, key, date)
     final_shifts.map do |letter|
-      shift_range.key(letter).chr
+      if letter.class == String
+        letter
+      else
+        shift_range.key(letter).chr
+      end
     end.join
   end
 
