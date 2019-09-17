@@ -71,40 +71,45 @@ class Encryptor
     hash
   end
 
-  def final_shift(message, key = nil, date = nil)
+  def final_shift(message, key, date)
     shifts = generate_shift(key, date).values
     shifts.map { |shift| shift % shift_range.length }
   end
 
-  # def find_position(message, key = nil, date = nil)
-  #   dc_message = message.downcase.chars
-  #   shifts = generate_shift(key, date).values
-  #   char_hash = shift_range
-  #   final_shifts = shifts.map { |shift| shift % char_hash.length }
-  #   final = []
-  #   char_hash.each do |ord_val, position|
-  #     dc_message.each_with_index do |letter, index|
-  #       (final_shifts[0] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 0
-  #
-  #       require 'pry'; binding.pry
-  #     end
-  # end
+  def find_index(message, key, date)
+    dc_message = message.downcase.chars
+    shift_arr = final_shift(message, key, date)
+    final = []
+      dc_message.each_with_index do |letter, index|
+        final << (shift_arr[0] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 0
+        final << (shift_arr[1] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 1
+        final << (shift_arr[2] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 2
+        final << (shift_arr[3] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 3
+      end
+    final
+  end
 
-  # def shift_message(message, key = nil, date = nil)
-  #   shifts = generate_shift(key, date).values
-  #   char_hash = shift_range
-  #   dc_message = message.downcase.chars
-  #   final_shifts = shifts.map { |shift| shift % char_hash.length }
-  #   final = []
-  #   char_hash.each do |ord_val, position|
-  #     dc_message.each_with_index do |letter, index|
-  #       final << char_hash.key(final_shifts[0] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 0
-  #       final << char_hash.key(final_shifts[1] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 1
-  #       final << char_hash.key(final_shifts[2] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 2
-  #       final << char_hash.key(final_shifts[3] + char_hash[letter.ord]).chr if character_set.include?(letter) && index % 4 == 3
-  #       require 'pry'; binding.pry
-  #     end
-  #   end
-  #   final.join
-  # end
+  def find_final_index(message, key, date)
+    final = find_index(message, key, date)
+    final_arr = []
+    final.each do |shift|
+      if shift > 27
+        final_arr << shift - shift_range.length
+      else
+        final_arr << shift
+      end
+    end
+    final_arr
+  end
+
+  def build_encryption(message, key, date)
+    final_shifts = find_final_index(message, key, date)
+    final_shifts.map do |letter|
+      shift_range.key(letter).chr
+    end.join
+  end
+
+  def encrypt_message(message, key = nil, date = nil)
+    build_encryption(message, key || @random_key, date || current_date)
+  end
 end
