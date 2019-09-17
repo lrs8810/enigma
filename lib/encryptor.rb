@@ -61,11 +61,10 @@ class Encryptor
   def generate_shift(key = nil, date = nil)
     build_shift(key || @random_key, date || current_date)
   end
-
+  
   def shift_range
-    chars = character_set.map(&:ord)
     hash = Hash.new(0)
-    chars.each.with_index(1) do | char, index|
+    character_set.each.with_index(1) do | char, index|
       hash[char] = index
     end
     hash
@@ -82,11 +81,10 @@ class Encryptor
     final = []
       dc_message.each_with_index do |letter, index|
         final << letter if !character_set.include?(letter)
-        final << (shift_arr[0] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 0
-        final << (shift_arr[1] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 1
-        final << (shift_arr[2] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 2
-        final << (shift_arr[3] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 3
-        # require 'pry'; binding.pry
+        final << (shift_arr[0] + shift_range[letter]) if character_set.include?(letter) && index % 4 == 0
+        final << (shift_arr[1] + shift_range[letter]) if character_set.include?(letter) && index % 4 == 1
+        final << (shift_arr[2] + shift_range[letter]) if character_set.include?(letter) && index % 4 == 2
+        final << (shift_arr[3] + shift_range[letter]) if character_set.include?(letter) && index % 4 == 3
       end
     final
   end
@@ -112,7 +110,7 @@ class Encryptor
       if letter.class == String
         letter
       else
-        shift_range.key(letter).chr
+        shift_range.key(letter)
       end
     end.join
   end
