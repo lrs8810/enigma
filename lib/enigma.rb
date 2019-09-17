@@ -1,8 +1,10 @@
 require './lib/encryptor'
+require './lib/decryptor'
 
 class Enigma
   def initialize
     @encryptor = Encryptor.new
+    @decryptor = Decryptor.new
   end
 
   def build_encrypt(message, key, date)
