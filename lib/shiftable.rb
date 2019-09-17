@@ -52,4 +52,17 @@ module Shiftable
   def generate_shift(key = nil, date = nil)
     build_shift(key || @random_key, date || current_date)
   end
+
+  def character_index
+    hash = Hash.new(0)
+    character_set.each.with_index(1) do | char, index|
+      hash[char] = index
+    end
+    hash
+  end
+
+  def calculate_shift_based_on_character_index(message, key, date)
+    shifts = generate_shift(key, date).values
+    shifts.map { |shift| shift % character_index.length }
+  end
 end

@@ -10,29 +10,16 @@ class Encryptor
     @random_key = RandomNumGenerator.generate_random_num
   end
 
-  def shift_range
-    hash = Hash.new(0)
-    character_set.each.with_index(1) do | char, index|
-      hash[char] = index
-    end
-    hash
-  end
-
-  def final_shift(message, key, date)
-    shifts = generate_shift(key, date).values
-    shifts.map { |shift| shift % shift_range.length }
-  end
-
   def find_index(message, key, date)
     dc_message = message.downcase.chars
-    shift_arr = final_shift(message, key, date)
+    shift_arr = calculate_shift_based_on_character_index(message, key, date)
     final = []
       dc_message.each_with_index do |letter, index|
         final << letter if !character_set.include?(letter)
-        final << (shift_arr[0] + shift_range[letter]) if character_set.include?(letter) && index % 4 == 0
-        final << (shift_arr[1] + shift_range[letter]) if character_set.include?(letter) && index % 4 == 1
-        final << (shift_arr[2] + shift_range[letter]) if character_set.include?(letter) && index % 4 == 2
-        final << (shift_arr[3] + shift_range[letter]) if character_set.include?(letter) && index % 4 == 3
+        final << (shift_arr[0] + character_index[letter]) if character_set.include?(letter) && index % 4 == 0
+        final << (shift_arr[1] + character_index[letter]) if character_set.include?(letter) && index % 4 == 1
+        final << (shift_arr[2] + character_index[letter]) if character_set.include?(letter) && index % 4 == 2
+        final << (shift_arr[3] + character_index[letter]) if character_set.include?(letter) && index % 4 == 3
       end
     final
   end
@@ -44,7 +31,7 @@ class Encryptor
       if shift.class == String
         final_arr << shift
       elsif shift > 27
-        final_arr << shift - shift_range.length
+        final_arr << shift - character_index.length
       else
         final_arr << shift
       end
@@ -58,7 +45,7 @@ class Encryptor
       if letter.class == String
         letter
       else
-        shift_range.key(letter)
+        character_index.key(letter)
       end
     end.join
   end
