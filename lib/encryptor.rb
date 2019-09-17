@@ -39,7 +39,7 @@ class Encryptor
 
   def split_key(key)
     key_arr = []
-    key.chars.each_cons(2) { |a, b| key_arr << a + b }
+    key.chars.each_cons(2) { |elem_1, elem_2| key_arr << elem_1 + elem_2 }
     key_arr.map(&:to_i)
   end
 
@@ -62,12 +62,54 @@ class Encryptor
     build_shift(key || @random_key, date || current_date)
   end
 
-  # def encrypt_message(message, key = nil, date = nil)
-  #   generate_shift(key, date)
-  #   message_arr = message.downcase.chars
-  #   message_arr.with_index(1) do |index, value|
-  #     puts "#{index}: #{value}"
-  #   end
-  #   require 'pry'; binding.pry
-  # end
+  def shift_range
+    chars = character_set.map(&:ord)
+    hash = Hash.new(0)
+    chars.each.with_index(1) do | char, index|
+      hash[char] = index
+    end
+    hash
+  end
+
+  def final_shift(message, key, date)
+    shifts = generate_shift(key, date).values
+    shifts.map { |shift| shift % shift_range.length }
+  end
+
+  def find_index(message, key, date)
+    dc_message = message.downcase.chars
+    shift_arr = final_shift(message, key, date)
+    final = []
+      dc_message.each_with_index do |letter, index|
+        final << (shift_arr[0] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 0
+        final << (shift_arr[1] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 1
+        final << (shift_arr[2] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 2
+        final << (shift_arr[3] + shift_range[letter.ord]) if character_set.include?(letter) && index % 4 == 3
+      end
+    final
+  end
+
+  def find_final_index(message, key, date)
+    final = find_index(message, key, date)
+    final_arr = []
+    final.each do |shift|
+      if shift > 27
+        final_arr << shift - shift_range.length
+      else
+        final_arr << shift
+      end
+    end
+    final_arr
+  end
+
+  def build_encryption(message, key, date)
+    final_shifts = find_final_index(message, key, date)
+    final_shifts.map do |letter|
+      shift_range.key(letter).chr
+    end.join
+  end
+
+  def encrypt_message(message, key = nil, date = nil)
+    build_encryption(message, key || @random_key, date || current_date)
+  end
 end
