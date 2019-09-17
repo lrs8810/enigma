@@ -96,18 +96,31 @@ class EncryptorTest < Minitest::Test
   def test_find_index
     expected = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23]
     assert_equal expected, @encryptor.find_index("Hello World", "02715", "040895")
+    expected2 = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23, 47, 11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23]
+    assert_equal expected2, @encryptor.find_index("HELLO WORLD hello world", "02715", "040895")
+    expected3 = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23, "!"]
+    assert_equal expected3, @encryptor.find_index("HELLO WORLD!", "02715", "040895")
   end
 
   def test_find_final_index
     expected = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23]
     assert_equal expected, @encryptor.find_final_index("Hello World", "02715", "040895")
+    expected = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23, 20, 11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23]
+    assert_equal expected, @encryptor.find_final_index("HELLO WORLD hello world", "02715", "040895")
+    expected3 = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23, "!"]
+    assert_equal expected3, @encryptor.find_final_index("HELLO WORLD!", "02715", "040895")
   end
 
   def test_build_encryption
     assert_equal "keder ohulw", @encryptor.build_encryption("Hello World", "02715", "040895")
+    assert_equal "keder ohulwtkeder ohulw", @encryptor.build_encryption("HELLO WORLD hello world", "02715", "040895")
+    assert_equal "keder ohulw!", @encryptor.build_encryption("HELLO WORLD!", "02715", "040895")
   end
 
   def test_encrypt_message
     assert_equal "keder ohulw", @encryptor.encrypt_message("Hello World", "02715", "040895")
+    assert_equal "keder ohulwtkeder ohulw", @encryptor.encrypt_message("HELLO WORLD hello world", "02715", "040895")
+    assert_equal "keder ohulw!", @encryptor.encrypt_message("HELLO WORLD!", "02715", "040895")
+    assert_equal "keder!ohulw", @encryptor.encrypt_message("HELLO!WORLD", "02715", "040895")
   end
 end
