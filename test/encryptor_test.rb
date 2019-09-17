@@ -84,7 +84,7 @@ class EncryptorTest < Minitest::Test
   end
 
   def test_shift_range
-    expected = {97=>1, 98=>2, 99=>3, 100=>4, 101=>5, 102=>6, 103=>7, 104=>8, 105=>9, 106=>10, 107=>11, 108=>12, 109=>13, 110=>14, 111=>15, 112=>16, 113=>17, 114=>18, 115=>19, 116=>20, 117=>21, 118=>22, 119=>23, 120=>24, 121=>25, 122=>26, 32=>27}
+    expected = {"a"=>1, "b"=>2, "c"=>3, "d"=>4, "e"=>5, "f"=>6, "g"=>7, "h"=>8, "i"=>9, "j"=>10, "k"=>11, "l"=>12, "m"=>13, "n"=>14, "o"=>15, "p"=>16, "q"=>17, "r"=>18, "s"=>19, "t"=>20, "u"=>21, "v"=>22, "w"=>23, "x"=>24, "y"=>25, "z"=>26, " "=>27}
     assert_equal expected, @encryptor.shift_range
   end
 
@@ -96,8 +96,10 @@ class EncryptorTest < Minitest::Test
   def test_find_index
     expected = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23]
     assert_equal expected, @encryptor.find_index("Hello World", "02715", "040895")
+
     expected2 = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23, 47, 11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23]
     assert_equal expected2, @encryptor.find_index("HELLO WORLD hello world", "02715", "040895")
+
     expected3 = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23, "!"]
     assert_equal expected3, @encryptor.find_index("HELLO WORLD!", "02715", "040895")
   end
@@ -105,8 +107,10 @@ class EncryptorTest < Minitest::Test
   def test_find_final_index
     expected = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23]
     assert_equal expected, @encryptor.find_final_index("Hello World", "02715", "040895")
+
     expected = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23, 20, 11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23]
     assert_equal expected, @encryptor.find_final_index("HELLO WORLD hello world", "02715", "040895")
+
     expected3 = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23, "!"]
     assert_equal expected3, @encryptor.find_final_index("HELLO WORLD!", "02715", "040895")
   end
