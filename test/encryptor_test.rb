@@ -93,7 +93,21 @@ class EncryptorTest < Minitest::Test
     assert_equal expected, @encryptor.final_shift("Hello World", "02715", "040895")
   end
 
-  def test_shift_message
-    assert_equal "keder ohulw", @encryptor.shift_message("Hello World", "02715", "040895")
+  def test_find_index
+    expected = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23]
+    assert_equal expected, @encryptor.find_index("Hello World", "02715", "040895")
+  end
+
+  def test_find_final_index
+    expected = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23]
+    assert_equal expected, @encryptor.find_final_index("Hello World", "02715", "040895")
+  end
+
+  def test_build_encryption
+    assert_equal "keder ohulw", @encryptor.build_encryption("Hello World", "02715", "040895")
+  end
+
+  def test_encrypt_message
+    assert_equal "keder ohulw", @encryptor.encrypt_message("Hello World", "02715", "040895")
   end
 end
