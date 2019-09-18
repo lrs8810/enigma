@@ -20,7 +20,7 @@ class EncryptorTest < Minitest::Test
   end
 
   def test_current_date
-    assert_equal 170919, @encryptor.current_date
+    assert_equal 180919, @encryptor.current_date
   end
 
   def test_square_date

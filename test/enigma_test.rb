@@ -23,13 +23,12 @@ class EnigmaTest < Minitest::Test
     expected = {
                 encryption: "njhauesdxq ",
                 key: "02715",
-                date: "170919"
+                date: "180919"
                 }
     assert_equal expected, @enigma.encrypt("hello world", "02715")
   end
 
   def test_it_can_decrypt_message_with_key_and_date
-    skip
     expected = {
                 decryption: "hello world",
                 key: "02715",
