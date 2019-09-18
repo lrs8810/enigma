@@ -19,10 +19,6 @@ class EncryptorTest < Minitest::Test
     assert_equal expected, @encryptor.character_set
   end
 
-  def test_current_date
-    assert_equal 180919, @encryptor.current_date
-  end
-
   def test_square_date
     assert_equal 1672401025, @encryptor.square_date("040895")
   end
@@ -93,26 +89,26 @@ class EncryptorTest < Minitest::Test
     assert_equal expected, @encryptor.calculate_shift_based_on_character_index("Hello World", "02715", "040895")
   end
 
-  def test_find_index
+  def test_find_encrypt_index
     expected = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23]
-    assert_equal expected, @encryptor.find_index("Hello World", "02715", "040895")
+    assert_equal expected, @encryptor.find_encrypt_index("Hello World", "02715", "040895")
 
     expected2 = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23, 47, 11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23]
-    assert_equal expected2, @encryptor.find_index("HELLO WORLD hello world", "02715", "040895")
+    assert_equal expected2, @encryptor.find_encrypt_index("HELLO WORLD hello world", "02715", "040895")
 
     expected3 = [11, 5, 31, 32, 18, 27, 42, 35, 21, 12, 23, "!"]
-    assert_equal expected3, @encryptor.find_index("HELLO WORLD!", "02715", "040895")
+    assert_equal expected3, @encryptor.find_encrypt_index("HELLO WORLD!", "02715", "040895")
   end
 
-  def test_find_final_index
+  def test_find_final__encrypt_index
     expected = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23]
-    assert_equal expected, @encryptor.find_final_index("Hello World", "02715", "040895")
+    assert_equal expected, @encryptor.find_final_encrypt_index("Hello World", "02715", "040895")
 
     expected = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23, 20, 11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23]
-    assert_equal expected, @encryptor.find_final_index("HELLO WORLD hello world", "02715", "040895")
+    assert_equal expected, @encryptor.find_final_encrypt_index("HELLO WORLD hello world", "02715", "040895")
 
     expected3 = [11, 5, 4, 5, 18, 27, 15, 8, 21, 12, 23, "!"]
-    assert_equal expected3, @encryptor.find_final_index("HELLO WORLD!", "02715", "040895")
+    assert_equal expected3, @encryptor.find_final_encrypt_index("HELLO WORLD!", "02715", "040895")
   end
 
   def test_build_encryption
