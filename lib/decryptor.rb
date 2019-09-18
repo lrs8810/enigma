@@ -27,7 +27,7 @@ class Decryptor
     final.each do |shift|
       if shift.class == String
         final_arr << shift
-      elsif shift < 0
+      elsif shift <= 0
         final_arr << shift + character_index.length
       else
         final_arr << shift
