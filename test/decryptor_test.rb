@@ -35,10 +35,13 @@ class DecryptorTest < Minitest::Test
   def test_build_decryption
     assert_equal "hello world", @decryptor.build_decryption("keder ohulw", "02715", "040895")
     assert_equal "hello world hello world", @decryptor.build_decryption("keder ohulwtkeder ohulw", "02715", "040895")
+    assert_equal "hello world!", @decryptor.build_decryption("keder ohulw!", "02715", "040895")
   end
 
   def test_decrypt_cipher
     assert_equal "hello world", @decryptor.decrypt_cipher("keder ohulw", "02715", "040895")
     assert_equal "hello world hello world", @decryptor.decrypt_cipher("keder ohulwtkeder ohulw", "02715", "040895")
+    assert_equal "hello world!", @decryptor.decrypt_cipher("keder ohulw!", "02715", "040895")
+    assert_equal "hello!world", @decryptor.decrypt_cipher("keder!ohulw", "02715", "040895")
   end
 end
