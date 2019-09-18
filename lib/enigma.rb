@@ -19,4 +19,17 @@ class Enigma
   def encrypt(message, key = nil, date = nil)
     build_encrypt(message, key || @encryptor.random_key, date || @encryptor.current_date.to_s)
   end
+
+  def build_decrypt(cipher, key, date)
+    decryption_hash = {
+      decryption: @decryptor.decrypt_cipher(cipher, key, date),
+      key: key,
+      date: date
+    }
+    decryption_hash
+  end
+
+  def decrypt(cipher, key, date = nil)
+    build_decrypt(cipher, key, date || @decryptor.current_date.to_s)
+  end
 end
